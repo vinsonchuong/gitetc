@@ -1,1 +1,1 @@
-makedepends=('clidoc')
+depends=('git')

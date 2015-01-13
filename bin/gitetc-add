@@ -1,0 +1,64 @@
+#!/bin/bash
+SHOW_HELP='no'
+ETCFILES="$(git config gitetc.path || echo "$HOME/.gitetc")"
+FILE="${1#/etc/}"
+
+ARGS=$(getopt -o  h -l help -- "$@")
+eval set -- $ARGS
+while [ $# -gt 0 ]
+do
+	case "$1" in
+		-h|--help)
+			SHOW_HELP='yes'
+			shift
+			;;
+		--)
+			shift
+			break
+			;;
+	esac
+done
+
+if [ "$SHOW_HELP" ]
+then
+	cat '/usr/share/gitetc/help/gitetc-add'
+else
+	function sudo() {
+		"$1" "${@:2}" || command sudo "$1" "${@:2}"
+	}
+
+	function pkginfo() {
+		pacman -Qi "$1" | grep "$2" | awk '{print $3}'
+	}
+
+	cd "$ETCFILES"
+	PACKAGE="$(sudo pacman -Qoq "/etc/$FILE")" && UPSTREAM='yes'
+
+	if [ "$UPSTREAM" ]
+	then
+		git checkout upstream
+		mkdir -p "$(dirname "$FILE")"
+		pkginfo $PACKAGE 'Version'
+		VERSION="$(pkginfo "$PACKAGE" 'Version')"
+		ARCH="$(pkginfo "$PACKAGE" 'Architecture')"
+		tar -xJOf "/var/cache/pacman/pkg/$PACKAGE-$VERSION-$ARCH.pkg.tar.xz" \
+			"etc/$FILE" > "$FILE"
+
+		git add "$FILE"
+		git commit -m "Add From Upstream: $FILE"
+
+		git checkout master
+		git merge --no-edit upstream
+	fi
+
+	git checkout master
+	mkdir -p "$(dirname "$FILE")"
+	sudo cat "/etc/$FILE" > "$FILE"
+	git add "$FILE"
+	if [ "$UPSTREAM" ]
+	then
+		git commit -m "Update: $FILE"
+	else
+		git commit -m "Add: $FILE"
+	fi
+fi
