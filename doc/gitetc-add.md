@@ -2,6 +2,7 @@
 
 ## SYNOPSIS
 `gitetc-add` `-h`|`--help`<br>
+`gitetc-add` <file> ...<br>
 
 ## DESCRIPTION
 `gitetc-add` tracks a new `/etc` file by adding it to the backing repository.
