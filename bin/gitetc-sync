@@ -26,6 +26,7 @@ else
 	if [ -d "$ETCFILES/.git" ]
 	then
 		cd "$ETCFILES"
+		git checkout master
 		git ls-files \
 			| sed 's|^|/etc/|' \
 			| xargs /home/vinsonchuong/projects/gitetc/bin/gitetc-add

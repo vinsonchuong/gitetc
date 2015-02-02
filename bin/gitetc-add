@@ -1,6 +1,6 @@
 #!/bin/bash
 function sudo() {
-	"$1" "${@:2}" || command sudo "$1" "${@:2}"
+	"$1" "${@:2}" 2>/dev/null || command sudo "$1" "${@:2}"
 }
 
 function pkginfo() {
@@ -38,9 +38,9 @@ else
 	[ "$(git symbolic-ref --short HEAD)" = upstream ] || git checkout upstream || git checkout -b upstream
 	for FILE in "$@"
 	do
-		FILE="$(realpath "$FILE")"
+		FILE="$(sudo realpath "$FILE")"
 		FILE="${FILE#/etc/}"
-		PACKAGE="$(sudo pacman -Qoq "/etc/$FILE")"
+		PACKAGE="$(sudo pacman -Qoq "/etc/$FILE" 2>/dev/null)"
 		if [ "$PACKAGE" ]
 		then
 			mkdir -p "$(dirname "$FILE")"
