@@ -1,0 +1,33 @@
+#!/bin/bash
+SHOW_HELP=
+
+ARGS=$(getopt -o  h -l help -- "$@")
+eval set -- $ARGS
+echo "$@"
+while [ $# -gt 0 ]
+do
+	case "$1" in
+		-h|--help)
+			SHOW_HELP='yes'
+			shift
+			;;
+		--)
+			shift
+			break
+			;;
+	esac
+done
+
+if [ "$SHOW_HELP" ]
+then
+	cat '/usr/share/gitetc/help/gitetc-sync'
+else
+	ETCFILES="$(git config gitetc.path || echo "$HOME/.gitetc")"
+	if [ -d "$ETCFILES/.git" ]
+	then
+		cd "$ETCFILES"
+		git ls-files \
+			| sed 's|^|/etc/|' \
+			| xargs /home/vinsonchuong/projects/gitetc/bin/gitetc-add
+	fi
+fi
