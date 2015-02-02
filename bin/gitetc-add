@@ -31,11 +31,11 @@ then
 	cat '/usr/share/gitetc/help/gitetc-add'
 else
 	ETCFILES="$(git config gitetc.path || echo "$HOME/.gitetc")"
-	mkdir -p "$ETCFILES"
-	cd "$ETCFILES"
-	git init
+	mkdir -p "$ETCFILES" && cd "$ETCFILES"
 
-	git checkout upstream || git checkout -b upstream
+	[ -d '.git' ] || git init
+
+	[ "$(git symbolic-ref --short HEAD)" = upstream ] || git checkout upstream || git checkout -b upstream
 	for FILE in "$@"
 	do
 		FILE="$(realpath "$FILE")"
@@ -53,7 +53,7 @@ else
 	done
 	git commit -m 'Update Upstream'
 
-	git checkout master || git checkout -b master
+	[ "$(git symbolic-ref --short HEAD)" = master ] || git checkout master || git checkout -b master
 	git merge --no-edit upstream
 
 	for FILE in "$@"
