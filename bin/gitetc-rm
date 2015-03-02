@@ -1,0 +1,53 @@
+#!/bin/bash
+function sudo() {
+	"$1" "${@:2}" 2>/dev/null || command sudo "$1" "${@:2}"
+}
+
+SHOW_HELP=
+ARGS=$(getopt -o  h -l help -- "$@")
+eval set -- $ARGS
+echo "$@"
+while [ $# -gt 0 ]
+do
+	case "$1" in
+		-h|--help)
+			SHOW_HELP='yes'
+			shift
+			;;
+		--)
+			shift
+			break
+			;;
+	esac
+done
+
+if [ "$SHOW_HELP" ]
+then
+	cat '/usr/share/gitetc/help/gitetc-rm'
+else
+	ETCFILES="$(git config gitetc.path || echo "$HOME/.gitetc")"
+	if [ -d "$ETCFILES/.git" ]
+	then
+		cd "$ETCFILES"
+
+		git checkout upstream
+		for FILE in "$@"
+		do
+			FILE="$(sudo realpath "$FILE")"
+			FILE="${FILE#/etc/}"
+			git rm "$FILE"
+		done
+		git commit -m 'Un-track files'
+
+		git checkout master
+		for FILE in "$@"
+		do
+			FILE="$(sudo realpath "$FILE")"
+			FILE="${FILE#/etc/}"
+			git rm "$FILE"
+		done
+		git commit -m 'Un-track files'
+
+		git merge --no-edit upstream
+	fi
+fi

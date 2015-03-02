@@ -58,6 +58,7 @@ else
 
 	for FILE in "$@"
 	do
+		FILE="$(sudo realpath "$FILE")"
 		FILE="${FILE#/etc/}"
 		mkdir -p "$(dirname "$FILE")"
 		sudo cat "/etc/$FILE" > "$FILE"

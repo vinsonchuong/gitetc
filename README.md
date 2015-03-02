@@ -11,7 +11,10 @@ check for changes tracked files.
 ## Scripts
 * `gitetc-add` track a new `/etc` file
   ([docs](doc/gitetc-add.md), [code](bin/gitetc-add))
+* `gitetc-rm` un-track an `/etc` file
+  ([docs](doc/gitetc-rm.md), [code](bin/gitetc-rm))
 * `gitetc-sync` checks `/etc` and updates all tracked files
+  ([docs](doc/gitetc-sync.md), [code](bin/gitetc-sync))
 * `gitetc-install` copies all tracked files to `/etc`
 
 ## Installing
