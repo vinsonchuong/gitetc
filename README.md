@@ -16,6 +16,7 @@ check for changes tracked files.
 * `gitetc-sync` checks `/etc` and updates all tracked files
   ([docs](doc/gitetc-sync.md), [code](bin/gitetc-sync))
 * `gitetc-install` copies all tracked files to `/etc`
+  ([docs](doc/gitetc-install.md), [code](bin/gitetc-install))
 
 ## Installing
 If the target machine is running [Arch Linux](https://www.archlinux.org/),

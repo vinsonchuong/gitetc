@@ -1,0 +1,42 @@
+#!/bin/bash
+function sudo() {
+	"$1" "${@:2}" 2>/dev/null || command sudo "$1" "${@:2}"
+}
+
+SHOW_HELP=
+
+ARGS=$(getopt -o  h -l help -- "$@")
+eval set -- $ARGS
+echo "$@"
+while [ $# -gt 0 ]
+do
+	case "$1" in
+		-h|--help)
+			SHOW_HELP='yes'
+			shift
+			;;
+		--)
+			shift
+			break
+			;;
+	esac
+done
+
+if [ "$SHOW_HELP" ]
+then
+	cat '/usr/share/gitetc/help/gitetc-install'
+else
+	ETCFILES="$(git config gitetc.path || echo "$HOME/.gitetc")"
+	if [ -d "$ETCFILES/.git" ]
+	then
+		cd "$ETCFILES"
+		git checkout master
+		for file in $(git ls-files)
+		do
+			if [ -f "/etc/$file" ]
+			then
+				sudo sh -c "cat \"$file\" > \"/etc/$file\""
+			fi
+		done
+	fi
+fi
