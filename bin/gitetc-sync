@@ -29,6 +29,6 @@ else
 		git checkout master
 		git ls-files \
 			| sed 's|^|/etc/|' \
-			| xargs /home/vinsonchuong/projects/gitetc/bin/gitetc-add
+			| xargs gitetc-add
 	fi
 fi
