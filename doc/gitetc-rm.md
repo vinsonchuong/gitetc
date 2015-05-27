@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 `gitetc-rm` `-h`|`--help`<br>
-`gitetc-rm` <file> ...<br>
+`gitetc-rm` _file_ ...<br>
 
 ## DESCRIPTION
 `gitetc-rm` removes a previously tracked `/etc` file from the backing

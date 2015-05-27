@@ -2,12 +2,12 @@
 
 ## SYNOPSIS
 `gitetc-add` `-h`|`--help`<br>
-`gitetc-add` <file> ...<br>
+`gitetc-add` _file_ ...<br>
 
 ## DESCRIPTION
 `gitetc-add` tracks a new `/etc` file by adding it to the backing repository.
 By default, the repository is in `~/.gitetc`. Its location can be configured
-using `git config --global gitetc.path <path>`. A repository will be created
+using `git config --global gitetc.path _path_`. A repository will be created
 if it doesn't already exist.
 
 ## OPTIONS
