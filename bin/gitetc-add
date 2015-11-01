@@ -46,7 +46,8 @@ else
 			mkdir -p "$(dirname "$FILE")"
 			VERSION="$(pkginfo "$PACKAGE" 'Version')"
 			ARCH="$(pkginfo "$PACKAGE" 'Architecture')"
-			tar -xJOf "/var/cache/pacman/pkg/$PACKAGE-$VERSION-$ARCH.pkg.tar.xz" \
+			tar --warning=none -xJOf \
+				"/var/cache/pacman/pkg/$PACKAGE-$VERSION-$ARCH.pkg.tar.xz" \
 				"etc/$FILE" > "$FILE"
 			git add "$FILE"
 		fi
