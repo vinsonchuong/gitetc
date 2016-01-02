@@ -13,4 +13,4 @@ repository.
   Show help text and exit.
 
 ## COPYRIGHT
-`gitetc` is Copyright (c) 2015 Vinson Chuong under the MIT License.
+`gitetc` is Copyright (c) 2016 Vinson Chuong under the MIT License.
